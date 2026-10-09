@@ -2,77 +2,119 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Camera Wala Sir</title>
+<title>Camera Wala Sir - Bhilwara</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-body{margin:0; background:#080808; color:white; font-family: Arial, sans-serif;}
-.header-nav { padding: 12px 15px; background: #0f0f0f; display: flex; align-items: center; border-bottom: 1px solid #222; position:sticky; top:0; z-index:10;}
-.site-logo { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; background: #222; border:2px solid #333;}
-.desc-line{background: #111; border-left: 4px solid #22c55e; border-right: 4px solid #f97316; color:#ddd; padding:12px 15px; font-size:14px; text-align:center;}
-.main-content { padding: 15px; max-width: 1200px; margin:auto; padding-bottom:70px;}
+*{box-sizing:border-box} body{margin:0; background:#080808; color:white; font-family: Inter, Arial, sans-serif;}
+.header-nav{padding:12px 15px; background:#0f0f0f; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:50; border-bottom:1px solid #222;}
+.site-logo{width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid #333;}
+.desc-line{background:linear-gradient(90deg,#22c55e,#f97316); color:black; padding:8px 15px; font-size:13px; text-align:center; font-weight:bold;}
+.hero{position:relative; height:70vh; display:flex; align-items:center; justify-content:center; text-align:center; background:#111; overflow:hidden;}
+.hero img{position:absolute; width:100%; height:100%; object-fit:cover; opacity:0.4;}
+.hero-content{position:relative; z-index:2; padding:20px;}
+.hero h1{font-size:32px; margin:0; line-height:1.2;} .hero p{color:#ccc; margin:10px 0 20px;}
+.btn{padding:14px 24px; border-radius:30px; border:none; font-weight:bold; cursor:pointer; text-decoration:none; display:inline-block;}
+.btn-green{background:#22c55e; color:black;} .btn-white{background:white; color:black;}
+.main{padding:15px; max-width:1200px; margin:auto; padding-bottom:80px;}
 .card{background:#141414; padding:20px; border-radius:16px; border:1px solid #222; margin-bottom:15px;}
-.card h3{margin:0 0 12px 0;}
-.gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:10px; }
-.gallery img { width:100%; height:220px; object-fit:cover; border-radius:12px; border:1px solid #222;}
+.grid4{display:grid; grid-template-columns:repeat(2,1fr); gap:10px;}
+.grid3{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:12px;}
+.service{border:1px solid #222; border-radius:12px; padding:15px; background:#0f0f0f; text-align:center;}
+.package{border:1px solid #222; border-radius:16px; padding:20px; background:#0f0f0f; position:relative;}
+.package.popular{border-color:#22c55e; transform:scale(1.02);}
+.price{font-size:28px; font-weight:bold; margin:10px 0;}
+.gallery{display:grid; grid-template-columns:repeat(2,1fr); gap:8px;} .gallery img{width:100%; height:200px; object-fit:cover; border-radius:12px;}
+.video-box iframe{width:100%; height:200px; border-radius:12px; border:none;}
+.ach{display:flex; justify-content:space-around; text-align:center;}
+.ach h2{color:#22c55e; margin:0; font-size:28px;}
+.faq-item{border-bottom:1px solid #222; padding:12px 0;}
 .scroll-bar{position:fixed; bottom:0; left:0; width:100%; background:white; color:black; padding:10px 0; font-weight:bold; font-size:13px; white-space:nowrap; overflow:hidden; z-index:100;}
 .scroll-text{display:inline-block; padding-left:100%; animation: scroll 25s linear infinite;}
 @keyframes scroll{0%{transform:translateX(0)} 100%{transform:translateX(-100%)}}
+input,select,textarea{width:100%; padding:12px; margin:6px 0; background:#1a1a1a; border:1px solid #333; color:white; border-radius:8px;}
 </style>
 </head>
 <body>
-
 <div class="header-nav">
-    <img id="mainSiteLogo" class="site-logo" src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg" alt="Logo" />
-    <h1 style="margin-left: 12px; font-size: 18px;">Camera Wala Sir</h1>
+<div style="display:flex; align-items:center;"><img id="mainSiteLogo" class="site-logo" src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"><h1 style="margin-left:10px; font-size:16px;">Camera Wala Sir</h1></div>
+<a id="waBtn" href="#" class="btn btn-green" style="padding:8px 16px; font-size:12px;">WhatsApp</a>
+</div>
+<div class="desc-line" id="topDesc">Booking available: classic dates</div>
+
+<div class="hero">
+<img id="heroImg" src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc">
+<div class="hero-content">
+<h1 id="heroTitle">Bhilwara's Best Cinematic Wedding Photographer</h1>
+<p id="heroSub">We capture emotions, not just photos</p>
+<a id="heroWa" href="#" class="btn btn-white">Book Now on WhatsApp</a>
+</div>
 </div>
 
-<div class="desc-line" id="analystView">Booking available: classic dates - Bhilwara</div>
-
-<div class="main-content">
-    <div class="card">
-        <h3>Gallery Photos</h3>
-        <div id="galleryBox" class="gallery"></div>
-    </div>
-
-    <div class="card">
-        <h3>Project Progress - 2026 (Jan to Dec)</h3>
-        <canvas id="myChart" height="250"></canvas>
-    </div>
+<div class="main">
+<!-- 2. Services -->
+<div class="card"><h3>Services</h3><div class="grid4" id="servicesBox"></div></div>
+<!-- 3. Packages -->
+<div class="card"><h3>Packages / Price</h3><div class="grid3" id="packagesBox"></div></div>
+<!-- Gallery -->
+<div class="card"><h3>Gallery Photos</h3><div id="galleryBox" class="gallery"></div></div>
+<!-- 4. Video -->
+<div class="card"><h3>Video / Reels</h3><div class="grid3" id="videoBox"></div></div>
+<!-- 7. Achievements -->
+<div class="card"><div class="ach" id="achBox"></div></div>
+<!-- 6. About -->
+<div class="card"><h3 id="aboutTitle">About - Camera Wala Sir</h3><p id="aboutText" style="color:#aaa; line-height:1.6;"></p></div>
+<!-- 5. Reviews -->
+<div class="card"><h3>Client Reviews</h3><div id="reviewBox"></div></div>
+<!-- 8. FAQ -->
+<div class="card"><h3>FAQ</h3><div id="faqBox"></div></div>
+<!-- 9. Contact -->
+<div class="card"><h3>Booking Form</h3><input id="cName" placeholder="Aapka Naam"><input id="cDate" type="date"><select id="cType"><option>Wedding</option><option>Pre-Wedding</option><option>Maternity</option><option>Modelling</option></select><button class="btn btn-green" style="width:100%; margin-top:10px;" onclick="sendWA()">WhatsApp Pe Bhejo</button></div>
 </div>
 
-<div class="scroll-bar">
-    <div class="scroll-text" id="scrollText">Booking ke liye sampark kare - Contact: +91 98765 43210</div>
-</div>
+<div class="scroll-bar"><div class="scroll-text" id="scrollText">Booking ke liye sampark kare</div></div>
 
 <script>
-window.addEventListener('DOMContentLoaded', function() {
-    const logo = localStorage.getItem('siteLogo');
-    if(logo) document.getElementById('mainSiteLogo').src = logo;
+function get(k,d){return localStorage.getItem(k)||d}
+window.addEventListener('DOMContentLoaded',()=>{
+document.getElementById('mainSiteLogo').src=get('siteLogo','https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg');
+document.getElementById('topDesc').innerText=get('topDesc','Booking available: classic dates');
+document.getElementById('heroTitle').innerText=get('heroTitle',"Bhilwara's Best Cinematic Wedding Photographer");
+document.getElementById('heroSub').innerText=get('heroSub',"We capture emotions, not just photos");
+const contact=get('contactNo','919876543210').replace(/[^0-9]/g,'');
+const waLink=`https://wa.me/${contact}?text=Hello%20Camera%20Wala%20Sir,%20Booking%20ke%20liye%20baat%20karni%20hai`;
+document.getElementById('waBtn').href=waLink; document.getElementById('heroWa').href=waLink;
+document.getElementById('scrollText').innerText=`📸 ${get('scrollMsg','Pre-Wedding, Wedding, Cinematic Shoot')} - Contact: ${get('contactNo','+91 98765 43210')} 📸`;
 
-    const desc = localStorage.getItem('analystData');
-    if(desc) document.getElementById('analystView').innerText = desc;
+const photos=JSON.parse(get('galleryPhotos','[]')); 
+if(photos.length){document.getElementById('heroImg').src=photos[0]; document.getElementById('galleryBox').innerHTML=photos.map(p=>`<img src="${p}">`).join('')}
 
-    const contact = localStorage.getItem('contactNo') || '+91 98765 43210';
-    const scrollMsg = localStorage.getItem('scrollMsg') || 'Booking ke liye sampark kare - Pre-Wedding, Wedding, Cinematic Shoot';
-    document.getElementById('scrollText').innerText = `📸 ${scrollMsg} - Contact: ${contact} - Camera Wala Sir 📸`;
+const services=JSON.parse(get('servicesData','["Wedding Photography","Pre-Wedding Shoot","Maternity / Baby","Modelling Portfolio"]'));
+document.getElementById('servicesBox').innerHTML=services.map(s=>`<div class="service">📸<br><b>${s}</b></div>`).join('');
 
-    const photos = JSON.parse(localStorage.getItem('galleryPhotos') || '[]');
-    document.getElementById('galleryBox').innerHTML = photos.map(l => `<img src="${l}">`).join('') || '<p style="color:#666;">Admin se photos add karo</p>';
+const packages=JSON.parse(get('packagesData','[{"name":"Basic","price":"₹15,000","feat":"1 Day | 300 Photos | Traditional Video"},{"name":"Standard","price":"₹30,000","feat":"2 Day | 500 Photos | Drone + Cinematic","popular":true},{"name":"Premium","price":"₹50,000","feat":"3 Day | 800 Photos | 2 Cinematic Video + Album"}]'));
+document.getElementById('packagesBox').innerHTML=packages.map(p=>`<div class="package ${p.popular?'popular':''}">${p.popular?'<span style="background:#22c55e;color:black;padding:2px 8px;border-radius:20px;font-size:10px;position:absolute;top:-10px;right:10px;">POPULAR</span>':''}<h4>${p.name}</h4><div class="price">${p.price}</div><p style="color:#888;font-size:13px;">${p.feat}</p><a href="${waLink}" class="btn btn-white" style="width:100%;text-align:center;">Book This</a></div>`).join('');
 
-    const chartData = JSON.parse(localStorage.getItem('chartData') || '[12,19,8,15,22,18,25,20,16,14,10,12]');
-    new Chart(document.getElementById('myChart'), {
-        type: 'bar',
-        data: {
-            labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-            datasets: [{ 
-                data: chartData, 
-                backgroundColor: ['#22c55e','#f97316','#22c55e','#f97316','#22c55e','#f97316','#22c55e','#f97316','#22c55e','#f97316','#22c55e','#f97316'],
-                borderRadius: 6
-            }]
-        },
-        options: { plugins:{legend:{display:false}}, scales: { x: { ticks: {color:'#888'}, grid:{display:false}}, y: { ticks: {color:'#888'}, grid:{color:'#222'} } } }
-    });
+const videos=JSON.parse(get('videoData','["https://www.youtube.com/embed/dQw4w9WgXcQ","https://www.youtube.com/embed/dQw4w9WgXcQ"]'));
+document.getElementById('videoBox').innerHTML=videos.map(v=>`<div class="video-box"><iframe src="${v}" allowfullscreen></iframe></div>`).join('');
+
+document.getElementById('aboutTitle').innerText=get('aboutTitle','About - Camera Wala Sir');
+document.getElementById('aboutText').innerText=get('aboutText','5 saal se 200+ weddings shoot kiye hai. Hum emotions capture karte hai, sirf photos nahi. Bhilwara, Udaipur, Chittorgarh me service available.');
+
+const ach=JSON.parse(get('achData','[{"n":"200+","l":"Weddings"},{"n":"50+","l":"Pre-Weddings"},{"n":"4.9★","l":"Rating"}]'));
+document.getElementById('achBox').innerHTML=ach.map(a=>`<div><h2>${a.n}</h2><p style="color:#888;font-size:13px;">${a.l}</p></div>`).join('');
+
+const reviews=JSON.parse(get('reviewsData','[{"name":"Rahul & Pooja","text":"Best photographer in Bhilwara! Cinematic video was amazing."},{"name":"Amit Family","text":"Bahut hi professional kaam, time pe album de diya."}]'));
+document.getElementById('reviewBox').innerHTML=reviews.map(r=>`<div style="background:#0f0f0f;padding:12px;border-radius:10px;margin-bottom:8px;"><b>${r.name}</b><p style="color:#aaa;font-size:13px;margin:5px 0 0;">"${r.text}"</p></div>`).join('');
+
+const faqs=JSON.parse(get('faqData','[{"q":"Album kab milega?","a":"Shoot ke 15-20 din me."},{"q":"Advance kitna?","a":"30% advance pe date block hoti hai."},{"q":"Drone included hai?","a":"Standard aur Premium me included hai."}]'));
+document.getElementById('faqBox').innerHTML=faqs.map(f=>`<div class="faq-item"><b>Q: ${f.q}</b><p style="color:#888;font-size:13px;margin-top:4px;">A: ${f.a}</p></div>`).join('');
 });
+function sendWA(){
+let n=document.getElementById('cName').value, d=document.getElementById('cDate').value, t=document.getElementById('cType').value;
+let contact=localStorage.getItem('contactNo')||'919876543210'; contact=contact.replace(/[^0-9]/g,'');
+let msg=`Hello Camera Wala Sir, Booking Inquiry:%0AName: ${n}%0ADate: ${d}%0AType: ${t}`;
+window.open(`https://wa.me/${contact}?text=${msg}`,'_blank');
+}
 </script>
 </body>
 </html>
