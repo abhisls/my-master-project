@@ -1,42 +1,36 @@
-<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin - CameraWale Sir</title>
-<style>body{background:#0a0a0a;color:white;font-family:sans-serif;padding:20px;max-width:700px;margin:auto}input,textarea{width:100%;padding:12px;margin:8px 0 16px;background:#1a1a1a;border:1px solid #333;color:white;border-radius:8px}button{padding:12px 20px;background:white;color:black;border:none;border-radius:8px;font-weight:bold;cursor:pointer;width:100%}.card{background:#141414;padding:20px;border-radius:12px;border:1px solid #222;margin-bottom:20px}img{max-width:200px;border-radius:8px;margin-top:10px}</style>
-</head><body>
-<h1>Admin Panel 🔧</h1><p style="color:#888;">Yaha se badlega, Index pe auto update hoga</p>
-
-<div class="card"><h3>1. Logo Badlo</h3><input id="logoInput" placeholder="Logo ka Copy Link yaha paste karo"><img id="logoPreview" src=""></div>
-
-<div class="card"><h3>2. Image Tab ki Photos (Comma se alag karke link dalo)</h3><textarea id="imgInput" rows="3" placeholder="https://link1.jpg, https://link2.jpg"></textarea></div>
-
-<div class="card"><h3>3. Chart Data (4 number dalo)</h3><input id="chartInput" placeholder="Ex: 12, 19, 3, 5"></div>
-
-<div class="card"><h3>4. Analyst Text</h3><textarea id="analystInput" rows="4" placeholder="Yaha report likho"></textarea></div>
-
-<button onclick="save()">SAVE KARO ✅</button>
-<p id="msg" style="text-align:center;color:lightgreen;margin-top:15px;"></p>
-<a href="index.html" style="display:block;text-align:center;margin-top:20px;color:#aaa;">Index Dekho -></a>
+<div class="container">
+    <h2>1. Logo Badlo</h2>
+    <!-- गैलरी से फोटो चुनने के लिए इनपुट -->
+    <input type="file" id="logoInput" accept="image/*" />
+    
+    <!-- प्रीव्यू देखने के लिए गोल घेरा -->
+    <div class="preview-circle" style="margin-top: 15px;">
+        <img id="logoPreview" src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg" alt="Preview" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;" />
+    </div>
+</div>
 
 <script>
-const def = {
-  logo: "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg",
-    images: ["https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800","https://images.unsplash.com/photo-1519741497674-611481863552?w=800"],
-      chart: [12,19,3,5],
-        analyst: "Bhilwara Wedding - Pending hai"
+const logoInput = document.getElementById('logoInput');
+const logoPreview = document.getElementById('logoPreview');
+
+// पहले से सेव इमेज लोड करें
+const savedLogo = localStorage.getItem('siteLogo');
+if (savedLogo) {
+    logoPreview.src = savedLogo;
+}
+
+// नई इमेज गैलरी से चुनने पर
+logoInput.addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const base64Image = e.target.result;
+            logoPreview.src = base64Image; // प्रीव्यू बदलें
+            localStorage.setItem('siteLogo', base64Image); // सेव करें
+            alert("लोगो बदल गया है! इंडेक्स पेज देखें।");
         };
-        let data = JSON.parse(localStorage.getItem('cameraWaleData') || JSON.stringify(def));
-        logoInput.value = data.logo; imgInput.value = data.images.join(', '); chartInput.value = data.chart.join(', '); analystInput.value = data.analyst;
-        logoPreview.src = data.logo;
-        logoInput.oninput = ()=> logoPreview.src = logoInput.value;
-        function save(){
-          const newData = {
-              logo: logoInput.value || def.logo,
-                  images: imgInput.value.split(',').map(s=>s.trim()).filter(Boolean),
-                      chart: chartInput.value.split(',').map(n=>parseInt(n.trim())||0),
-                          analyst: analystInput.value
-                            };
-                              localStorage.setItem('cameraWaleData', JSON.stringify(newData));
-                                msg.innerText = "Ho gaya Save! Ab Index.html khol ke dekh.";
-                                  setTimeout(()=>msg.innerText="",3000);
-                                  }
-                                  </script></body></html>
+        reader.readAsDataURL(file);
+    }
+});
+</script>
