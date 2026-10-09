@@ -1,38 +1,27 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin - Camera Wala Sir</title>
-<style>body{background:#0a0a0a;color:white;font-family:sans-serif;padding:20px;max-width:600px;margin:auto}input{width:100%;padding:12px;margin:8px 0;background:#1a1a1a;border:1px solid #333;color:white;border-radius:8px;box-sizing:border-box}button{padding:12px;background:white;color:black;border:none;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;margin-top:10px}.card{background:#141414;padding:20px;border-radius:16px;border:1px solid #222;margin-bottom:20px}img{width:100px;height:100px;object-fit:cover;border-radius:8px;margin:5px;border:1px solid #333}</style>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin</title>
+<style>body{background:#0a0a0a;color:white;font-family:sans-serif;padding:20px;max-width:600px;margin:auto}input{width:100%;padding:12px;margin:8px 0;background:#1a1a1a;border:1px solid #333;color:white;border-radius:8px;box-sizing:border-box}button{padding:12px;background:white;color:black;border:none;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;margin-top:10px}.card{background:#141414;padding:20px;border-radius:16px;border:1px solid #222;margin-bottom:15px}img{width:90px;height:90px;object-fit:cover;border-radius:8px;margin:5px;border:1px solid #333}</style>
 </head><body>
-<h2>Admin Panel</h2>
+<h2>Admin - Camera Wala Sir</h2>
 
-<div class="card">
-  <h3>Logo + Gallery Upload</h3>
-  <label>Logo (Top wala gol photo)</label>
-  <input type="file" id="logoFile" accept="image/*">
-  <img id="logoPreview" src="" style="display:block;margin-top:10px;">
-  <button onclick="saveLogo()">Logo Save Karo</button>
-  <hr style="border-color:#222; margin:20px 0;">
-  <label>Gallery Photos (Ek saath kaafi select kar sakte ho)</label>
-  <input type="file" id="galleryFile" accept="image/*" multiple>
-  <button onclick="addGallery()">Gallery Me Add Karo</button>
-  <div id="preview" style="display:flex;flex-wrap:wrap;margin-top:15px;"></div>
-</div>
+<div class="card"><h3>Description Line</h3><input id="descInput" placeholder="Booking available: classic dates"><button onclick="localStorage.setItem('analystData',descInput.value);alert('Save')">Save</button></div>
 
-<div class="card">
-  <h3>Description (Analyst View ki jagah)</h3>
-  <input id="analystInput" placeholder="Ex: Booking open for 2026...">
-  <button onclick="saveDesc()">Description Save Karo</button>
-</div>
+<div class="card"><h3>Logo</h3><input type="file" id="lFile" accept="image/*"><img id="lPrev" style="display:block;margin-top:10px;"><button onclick="saveL()">Save Logo</button></div>
 
-<a href="index.html" style="color:#aaa;display:block;text-align:center;margin-top:20px;">Index Dekho - Camera Wala Sir -></a>
+<div class="card"><h3>Gallery (Multiple Select)</h3><input type="file" id="gFile" accept="image/*" multiple><button onclick="addG()">Add Gallery</button><div id="prev" style="display:flex;flex-wrap:wrap;margin-top:10px;"></div><button onclick="localStorage.removeItem('galleryPhotos');loadP()" style="background:#ff2a2a;color:white;">Delete All</button></div>
+
+<div class="card"><h3>Chart Jan-Dec (12 numbers)</h3><input id="chartIn" value="12,19,8,15,22,18,25,20,16,14,10,12"><button onclick="localStorage.setItem('chartData',JSON.stringify(chartIn.value.split(',').map(n=>parseInt(n)||0)));alert('Chart Save - Green Orange Ho Gaya')">Save Chart (Green Orange)</button></div>
+
+<div class="card"><h3>Bottom Scroll + Contact</h3><input id="scrollIn" placeholder="Booking ke liye sampark kare"><input id="contactIn" placeholder="+91 98765 43210"><button onclick="localStorage.setItem('scrollMsg',scrollIn.value);localStorage.setItem('contactNo',contactIn.value);alert('Save')">Save Bottom Line</button></div>
+
+<a href="index.html" style="color:#aaa;display:block;text-align:center;margin-top:20px;">Index Dekho -></a>
 
 <script>
-let tempLogo = localStorage.getItem('siteLogo') || '';
-if(tempLogo) document.getElementById('logoPreview').src = tempLogo;
-const toBase64 = file => new Promise(r=>{let f=new FileReader(); f.onload=()=>r(f.result); f.readAsDataURL(file)});
-document.getElementById('logoFile').addEventListener('change', async e=>{ if(e.target.files[0]){ tempLogo=await toBase64(e.target.files[0]); document.getElementById('logoPreview').src=tempLogo; }});
-function saveLogo(){localStorage.setItem('siteLogo', tempLogo); alert('Logo Save');}
-async function addGallery(){let files=document.getElementById('galleryFile').files; if(!files.length) return alert('Photo select karo'); let arr=JSON.parse(localStorage.getItem('galleryPhotos')||'[]'); for(let f of files){arr.push(await toBase64(f))} localStorage.setItem('galleryPhotos', JSON.stringify(arr)); loadPreview(); alert('Gallery Save');}
-function loadPreview(){let arr=JSON.parse(localStorage.getItem('galleryPhotos')||'[]'); document.getElementById('preview').innerHTML=arr.map((l,i)=>`<div style="position:relative"><img src="${l}"><span onclick="del(${i})" style="position:absolute;top:-5px;right:-5px;background:red;width:20px;height:20px;border-radius:50%;text-align:center;cursor:pointer;">x</span></div>`).join('');}
-function del(i){let a=JSON.parse(localStorage.getItem('galleryPhotos')||'[]'); a.splice(i,1); localStorage.setItem('galleryPhotos', JSON.stringify(a)); loadPreview();}
-function saveDesc(){localStorage.setItem('analystData', document.getElementById('analystInput').value); alert('Description Save');}
-loadPreview(); document.getElementById('analystInput').value=localStorage.getItem('analystData')||'';
+let tempLogo=localStorage.getItem('siteLogo')||''; if(tempLogo) document.getElementById('lPrev').src=tempLogo;
+const toB64=f=>new Promise(r=>{let fr=new FileReader(); fr.onload=()=>r(fr.result); fr.readAsDataURL(f)});
+document.getElementById('lFile').addEventListener('change', async e=>{if(e.target.files[0]){tempLogo=await toB64(e.target.files[0]); document.getElementById('lPrev').src=tempLogo;}});
+function saveL(){localStorage.setItem('siteLogo',tempLogo);alert('Logo Save')}
+async function addG(){let files=document.getElementById('gFile').files; if(!files.length) return alert('Photo chuno'); let arr=JSON.parse(localStorage.getItem('galleryPhotos')||'[]'); for(let f of files)arr.push(await toB64(f)); localStorage.setItem('galleryPhotos',JSON.stringify(arr)); loadP();}
+function loadP(){let arr=JSON.parse(localStorage.getItem('galleryPhotos')||'[]'); document.getElementById('prev').innerHTML=arr.map((l,i)=>`<div style="position:relative"><img src="${l}"><span onclick="let a=JSON.parse(localStorage.getItem('galleryPhotos')||'[]');a.splice(${i},1);localStorage.setItem('galleryPhotos',JSON.stringify(a));loadP()" style="position:absolute;top:-5px;right:-5px;background:red;width:20px;height:20px;border-radius:50%;text-align:center;cursor:pointer;">x</span></div>`).join('');}
+loadP();
+document.getElementById('descInput').value=localStorage.getItem('analystData')||''; document.getElementById('chartIn').value=(JSON.parse(localStorage.getItem('chartData')||'[12,19,8,15,22,18,25,20,16,14,10,12]')).join(','); document.getElementById('scrollIn').value=localStorage.getItem('scrollMsg')||''; document.getElementById('contactIn').value=localStorage.getItem('contactNo')||'';
 </script></body></html>
