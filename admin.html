@@ -1,27 +1,34 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin</title>
-<style>body{background:#0a0a0a;color:white;font-family:sans-serif;padding:20px;max-width:600px;margin:auto}input{width:100%;padding:12px;margin:8px 0;background:#1a1a1a;border:1px solid #333;color:white;border-radius:8px;box-sizing:border-box}button{padding:12px;background:white;color:black;border:none;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;margin-top:10px}.card{background:#141414;padding:20px;border-radius:16px;border:1px solid #222;margin-bottom:15px}img{width:90px;height:90px;object-fit:cover;border-radius:8px;margin:5px;border:1px solid #333}</style>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin - Camera Wala Sir</title>
+<style>body{background:#0a0a0a;color:white;font-family:sans-serif;padding:15px;max-width:700px;margin:auto}input,textarea{width:100%;padding:12px;margin:6px 0;background:#1a1a1a;border:1px solid #333;color:white;border-radius:8px;box-sizing:border-box}button{padding:12px;background:white;color:black;border:none;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;margin-top:8px}.card{background:#141414;padding:16px;border-radius:16px;border:1px solid #222;margin-bottom:12px}img{width:80px;height:80px;object-fit:cover;border-radius:8px;margin:4px}label{font-size:12px;color:#aaa}</style>
 </head><body>
-<h2>Admin - Camera Wala Sir</h2>
+<h2>Admin - All 9 Sections Edit</h2>
 
-<div class="card"><h3>Description Line</h3><input id="descInput" placeholder="Booking available: classic dates"><button onclick="localStorage.setItem('analystData',descInput.value);alert('Save')">Save</button></div>
+<div class="card"><h3>Logo + Top Line</h3><input type="file" id="lFile" accept="image/*"><button onclick="saveL()">Save Logo</button><label>Top Description Line</label><input id="topDesc"><button onclick="localStorage.setItem('topDesc',topDesc.value);alert('Save')">Save Top Line</button></div>
 
-<div class="card"><h3>Logo</h3><input type="file" id="lFile" accept="image/*"><img id="lPrev" style="display:block;margin-top:10px;"><button onclick="saveL()">Save Logo</button></div>
+<div class="card"><h3>1. Hero Banner</h3><label>Main Title</label><input id="hTitle"><label>Subtitle</label><input id="hSub"><button onclick="localStorage.setItem('heroTitle',hTitle.value);localStorage.setItem('heroSub',hSub.value);alert('Hero Save')">Save Hero</button></div>
 
-<div class="card"><h3>Gallery (Multiple Select)</h3><input type="file" id="gFile" accept="image/*" multiple><button onclick="addG()">Add Gallery</button><div id="prev" style="display:flex;flex-wrap:wrap;margin-top:10px;"></div><button onclick="localStorage.removeItem('galleryPhotos');loadP()" style="background:#ff2a2a;color:white;">Delete All</button></div>
+<div class="card"><h3>2. Services (Comma se)</h3><input id="serIn" placeholder="Wedding, Pre-Wedding, Maternity, Modelling"><button onclick="localStorage.setItem('servicesData',JSON.stringify(serIn.value.split(',').map(s=>s.trim())));alert('Services Save')">Save Services</button></div>
 
-<div class="card"><h3>Chart Jan-Dec (12 numbers)</h3><input id="chartIn" value="12,19,8,15,22,18,25,20,16,14,10,12"><button onclick="localStorage.setItem('chartData',JSON.stringify(chartIn.value.split(',').map(n=>parseInt(n)||0)));alert('Chart Save - Green Orange Ho Gaya')">Save Chart (Green Orange)</button></div>
+<div class="card"><h3>3. Gallery</h3><input type="file" id="gFile" multiple accept="image/*"><button onclick="addG()">Add Photos</button><div id="prev" style="display:flex;flex-wrap:wrap;"></div></div>
 
-<div class="card"><h3>Bottom Scroll + Contact</h3><input id="scrollIn" placeholder="Booking ke liye sampark kare"><input id="contactIn" placeholder="+91 98765 43210"><button onclick="localStorage.setItem('scrollMsg',scrollIn.value);localStorage.setItem('contactNo',contactIn.value);alert('Save')">Save Bottom Line</button></div>
+<div class="card"><h3>4. Video Links (YouTube Embed Link)</h3><textarea id="vidIn" rows="3" placeholder="https://www.youtube.com/embed/xxx"></textarea><button onclick="localStorage.setItem('videoData',JSON.stringify(vidIn.value.split('\n').filter(x=>x.trim())));alert('Video Save')">Save Videos (Har line me 1 link)</button></div>
+
+<div class="card"><h3>5. Packages - JSON (Easy)</h3><textarea id="packIn" rows="6"></textarea><button onclick="localStorage.setItem('packagesData',packIn.value);alert('Packages Save')">Save Packages</button></div>
+
+<div class="card"><h3>6. About</h3><input id="abTitle"><textarea id="abText" rows="3"></textarea><button onclick="localStorage.setItem('aboutTitle',abTitle.value);localStorage.setItem('aboutText',abText.value);alert('About Save')">Save About</button></div>
+
+<div class="card"><h3>7. Achievements (200+ Weddings etc)</h3><input id="achIn" placeholder="200+ Weddings, 50+ Pre-Weddings, 4.9 Rating"><button onclick="let a=achIn.value.split(',').map(x=>{let p=x.trim().split(' '); return {n:p[0], l:p.slice(1).join(' ')};}); localStorage.setItem('achData',JSON.stringify(a)); alert('Achievements Save')">Save Achievements</button></div>
+
+<div class="card"><h3>8. Reviews (Name | Review)</h3><textarea id="revIn" rows="4" placeholder="Rahul & Pooja | Best work"></textarea><button onclick="let r=revIn.value.split('\n').map(l=>{let p=l.split('|'); return {name:p[0], text:p[1]}}).filter(x=>x.name); localStorage.setItem('reviewsData',JSON.stringify(r)); alert('Reviews Save')">Save Reviews</button></div>
+
+<div class="card"><h3>9. Contact + Bottom Scroll</h3><input id="cNo" placeholder="+91 98765 43210"><input id="scrollIn" placeholder="Booking ke liye sampark kare"><button onclick="localStorage.setItem('contactNo',cNo.value);localStorage.setItem('scrollMsg',scrollIn.value);alert('Save Contact')">Save Contact & Scroll</button></div>
 
 <a href="index.html" style="color:#aaa;display:block;text-align:center;margin-top:20px;">Index Dekho -></a>
 
 <script>
-let tempLogo=localStorage.getItem('siteLogo')||''; if(tempLogo) document.getElementById('lPrev').src=tempLogo;
-const toB64=f=>new Promise(r=>{let fr=new FileReader(); fr.onload=()=>r(fr.result); fr.readAsDataURL(f)});
-document.getElementById('lFile').addEventListener('change', async e=>{if(e.target.files[0]){tempLogo=await toB64(e.target.files[0]); document.getElementById('lPrev').src=tempLogo;}});
-function saveL(){localStorage.setItem('siteLogo',tempLogo);alert('Logo Save')}
-async function addG(){let files=document.getElementById('gFile').files; if(!files.length) return alert('Photo chuno'); let arr=JSON.parse(localStorage.getItem('galleryPhotos')||'[]'); for(let f of files)arr.push(await toB64(f)); localStorage.setItem('galleryPhotos',JSON.stringify(arr)); loadP();}
-function loadP(){let arr=JSON.parse(localStorage.getItem('galleryPhotos')||'[]'); document.getElementById('prev').innerHTML=arr.map((l,i)=>`<div style="position:relative"><img src="${l}"><span onclick="let a=JSON.parse(localStorage.getItem('galleryPhotos')||'[]');a.splice(${i},1);localStorage.setItem('galleryPhotos',JSON.stringify(a));loadP()" style="position:absolute;top:-5px;right:-5px;background:red;width:20px;height:20px;border-radius:50%;text-align:center;cursor:pointer;">x</span></div>`).join('');}
-loadP();
-document.getElementById('descInput').value=localStorage.getItem('analystData')||''; document.getElementById('chartIn').value=(JSON.parse(localStorage.getItem('chartData')||'[12,19,8,15,22,18,25,20,16,14,10,12]')).join(','); document.getElementById('scrollIn').value=localStorage.getItem('scrollMsg')||''; document.getElementById('contactIn').value=localStorage.getItem('contactNo')||'';
+let tLogo=localStorage.getItem('siteLogo')||''; const toB64=f=>new Promise(r=>{let fr=new FileReader(); fr.onload=()=>r(fr.result); fr.readAsDataURL(f)});
+document.getElementById('lFile').addEventListener('change', async e=>{if(e.target.files[0]){tLogo=await toB64(e.target.files[0])}}); function saveL(){localStorage.setItem('siteLogo',tLogo);alert('Logo Save')}
+async function addG(){let files=document.getElementById('gFile').files; let arr=JSON.parse(localStorage.getItem('galleryPhotos')||'[]'); for(let f of files)arr.push(await toB64(f)); localStorage.setItem('galleryPhotos',JSON.stringify(arr)); loadP();}
+function loadP(){let arr=JSON.parse(localStorage.getItem('galleryPhotos')||'[]'); document.getElementById('prev').innerHTML=arr.map((l,i)=>`<img src="${l}" onclick="let a=JSON.parse(localStorage.getItem('galleryPhotos')||'[]');a.splice(${i},1);localStorage.setItem('galleryPhotos',JSON.stringify(a));loadP()">`).join('');} loadP();
+document.getElementById('topDesc').value=localStorage.getItem('topDesc')||''; document.getElementById('hTitle').value=localStorage.getItem('heroTitle')||''; document.getElementById('hSub').value=localStorage.getItem('heroSub')||''; document.getElementById('serIn').value=(JSON.parse(localStorage.getItem('servicesData')||'["Wedding Photography","Pre-Wedding Shoot","Maternity / Baby","Modelling Portfolio"]')).join(', '); document.getElementById('vidIn').value=(JSON.parse(localStorage.getItem('videoData')||'[]')).join('\n'); document.getElementById('packIn').value=localStorage.getItem('packagesData')||`[{"name":"Basic","price":"₹15,000","feat":"1 Day | 300 Photos"},{"name":"Standard","price":"₹30,000","feat":"2 Day | 500 Photos | Drone","popular":true},{"name":"Premium","price":"₹50,000","feat":"3 Day | Album + Cinematic"}]`; document.getElementById('abTitle').value=localStorage.getItem('aboutTitle')||''; document.getElementById('abText').value=localStorage.getItem('aboutText')||''; document.getElementById('achIn').value=(JSON.parse(localStorage.getItem('achData')||'[]')).map(a=>a.n+' '+a.l).join(', '); document.getElementById('revIn').value=(JSON.parse(localStorage.getItem('reviewsData')||'[]')).map(r=>r.name+' | '+r.text).join('\n'); document.getElementById('cNo').value=localStorage.getItem('contactNo')||''; document.getElementById('scrollIn').value=localStorage.getItem('scrollMsg')||'';
 </script></body></html>
