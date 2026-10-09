@@ -5,39 +5,43 @@
 <title>Camera Wala Sir</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-body{margin:0; font-family: Arial, sans-serif; background:#080808; color:white;}
+body{margin:0; background:#080808; color:white; font-family: Arial, sans-serif;}
 .header-nav { padding: 12px 15px; background: #0f0f0f; display: flex; align-items: center; border-bottom: 1px solid #222; position:sticky; top:0; z-index:10;}
-.site-logo { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #222; border:2px solid #333;}
-.main-content { padding: 15px; max-width: 1200px; margin:auto;}
+.site-logo { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; background: #222; border:2px solid #333;}
+.desc-line{background: #111; border-left: 4px solid #22c55e; border-right: 4px solid #f97316; color:#ddd; padding:12px 15px; font-size:14px; text-align:center;}
+.main-content { padding: 15px; max-width: 1200px; margin:auto; padding-bottom:70px;}
 .card{background:#141414; padding:20px; border-radius:16px; border:1px solid #222; margin-bottom:15px;}
-.card h3{margin:0 0 10px 0;}
-.gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap:10px; }
-.gallery img { width:100%; height:200px; object-fit:cover; border-radius:12px; }
-#analystView{color:#ccc; line-height:1.5;}
+.card h3{margin:0 0 12px 0;}
+.gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:10px; }
+.gallery img { width:100%; height:220px; object-fit:cover; border-radius:12px; border:1px solid #222;}
+.scroll-bar{position:fixed; bottom:0; left:0; width:100%; background:white; color:black; padding:10px 0; font-weight:bold; font-size:13px; white-space:nowrap; overflow:hidden; z-index:100;}
+.scroll-text{display:inline-block; padding-left:100%; animation: scroll 25s linear infinite;}
+@keyframes scroll{0%{transform:translateX(0)} 100%{transform:translateX(-100%)}}
 </style>
 </head>
 <body>
+
 <div class="header-nav">
     <img id="mainSiteLogo" class="site-logo" src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg" alt="Logo" />
     <h1 style="margin-left: 12px; font-size: 18px;">Camera Wala Sir</h1>
 </div>
 
+<div class="desc-line" id="analystView">Booking available: classic dates - Bhilwara</div>
+
 <div class="main-content">
-    <!-- Description - pehle Analyst View tha -->
-    <div class="card">
-        <h3>Description</h3>
-        <div id="analystView">Booking open</div>
-    </div>
-
-    <div class="card">
-        <h3>Project Progress</h3>
-        <canvas id="myChart" width="400" height="200"></canvas>
-    </div>
-
     <div class="card">
         <h3>Gallery Photos</h3>
         <div id="galleryBox" class="gallery"></div>
     </div>
+
+    <div class="card">
+        <h3>Project Progress - 2026 (Jan to Dec)</h3>
+        <canvas id="myChart" height="250"></canvas>
+    </div>
+</div>
+
+<div class="scroll-bar">
+    <div class="scroll-text" id="scrollText">Booking ke liye sampark kare - Contact: +91 98765 43210</div>
 </div>
 
 <script>
@@ -48,18 +52,25 @@ window.addEventListener('DOMContentLoaded', function() {
     const desc = localStorage.getItem('analystData');
     if(desc) document.getElementById('analystView').innerText = desc;
 
-    const photos = JSON.parse(localStorage.getItem('galleryPhotos') || '[]');
-    const box = document.getElementById('galleryBox');
-    box.innerHTML = photos.map(l => `<img src="${l}">`).join('');
+    const contact = localStorage.getItem('contactNo') || '+91 98765 43210';
+    const scrollMsg = localStorage.getItem('scrollMsg') || 'Booking ke liye sampark kare - Pre-Wedding, Wedding, Cinematic Shoot';
+    document.getElementById('scrollText').innerText = `📸 ${scrollMsg} - Contact: ${contact} - Camera Wala Sir 📸`;
 
-    const chartData = JSON.parse(localStorage.getItem('chartData') || '[12, 19, 8, 15]');
+    const photos = JSON.parse(localStorage.getItem('galleryPhotos') || '[]');
+    document.getElementById('galleryBox').innerHTML = photos.map(l => `<img src="${l}">`).join('') || '<p style="color:#666;">Admin se photos add karo</p>';
+
+    const chartData = JSON.parse(localStorage.getItem('chartData') || '[12,19,8,15,22,18,25,20,16,14,10,12]');
     new Chart(document.getElementById('myChart'), {
         type: 'bar',
         data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr'],
-            datasets: [{ label: 'Work', data: chartData, backgroundColor: '#ff2a2a', borderRadius: 4 }]
+            labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+            datasets: [{ 
+                data: chartData, 
+                backgroundColor: ['#22c55e','#f97316','#22c55e','#f97316','#22c55e','#f97316','#22c55e','#f97316','#22c55e','#f97316','#22c55e','#f97316'],
+                borderRadius: 6
+            }]
         },
-        options: { plugins:{legend:{display:false}}, scales: { x: { ticks: {color:'#888'} , grid:{display:false}}, y: { ticks: {color:'#888'}, grid:{color:'#222'} } } }
+        options: { plugins:{legend:{display:false}}, scales: { x: { ticks: {color:'#888'}, grid:{display:false}}, y: { ticks: {color:'#888'}, grid:{color:'#222'} } } }
     });
 });
 </script>
