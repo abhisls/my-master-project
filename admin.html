@@ -1,56 +1,271 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin - Final</title>
-<style>body{background:#0a0a0a;color:white;font-family:sans-serif;padding:20px;max-width:600px;margin:auto}input{width:100%;padding:12px;margin:8px 0;background:#1a1a1a;border:1px solid #333;color:white;border-radius:8px}button{padding:12px;background:white;color:black;border:none;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;margin-top:10px}.card{background:#141414;padding:20px;border-radius:12px;border:1px solid #222;margin-bottom:20px}img{width:100px;height:100px;object-fit:cover;border-radius:8px;margin:5px;border:1px solid #333}</style>
-</head><body>
-<h2>Admin - Final Upload System</h2>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Final</title>
+  <style>
+    body {
+      background: #0a0a0a;
+      color: white;
+      font-family: sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      color: white;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 12px;
+      background: white;
+      color: black;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .card {
+      background: #141414;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #222;
+      margin-bottom: 20px;
+    }
+    img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin: 5px;
+      border: 1px solid #333;
+      display: block;
+    }
+    #preview {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 15px;
+      gap: 10px;
+    }
+    #logoPreview {
+      display: block;
+      margin-top: 10px;
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #333;
+    }
+    .delete-btn {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: red;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      text-align: center;
+      cursor: pointer;
+      line-height: 22px;
+      font-size: 14px;
+      color: white;
+      border: none;
+    }
+    .thumb {
+      position: relative;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <h2>Admin - Final Upload System</h2>
 
-<div class="card">
-  <h3>1. Logo Upload Karo (Phone se)</h3>
-  <input type="file" id="logoFile" accept="image/*">
-  <img id="logoPreview" src="" style="display:block;margin-top:10px;">
-  <button onclick="saveLogo()">Logo Save Karo</button>
-</div>
+  <div class="card">
+    <h3>1. Logo Upload Karo (Phone se)</h3>
+    <input type="file" id="logoFile" accept="image/*">
+    <img id="logoPreview" src="" alt="Logo Preview">
+    <button onclick="saveLogo()">Logo Save Karo</button>
+  </div>
 
-<div class="card">
-  <h3>2. Gallery Photos Upload Karo</h3>
-  <input type="file" id="galleryFile" accept="image/*" multiple>
-  <p style="color:#888;font-size:12px;">Ek saath 5-6 photo select kar sakta hai</p>
-  <button onclick="addGalleryPhotos()">+ Gallery Me Add Karo</button>
-  <div id="preview" style="display:flex;flex-wrap:wrap;margin-top:15px;"></div>
-  <button onclick="clearGallery()" style="background:#ff2a2a;color:white;">Saari Delete</button>
-</div>
+  <div class="card">
+    <h3>2. Gallery Photos Upload Karo</h3>
+    <input type="file" id="galleryFile" accept="image/*" multiple>
+    <p style="color:#888;font-size:12px;">Ek saath 5-6 photo select kar sakta hai</p>
+    <button onclick="addGalleryPhotos()">+ Gallery Me Add Karo</button>
+    <div id="preview"></div>
+    <button onclick="clearGallery()" style="background:#ff2a2a;color:white;">Saari Delete</button>
+  </div>
 
-<div class="card">
-  <h3>3. Analyst Text</h3>
-  <input id="analystInput" placeholder="Jai Shree Ram jaise text" style="padding:12px;">
-  <button onclick="saveAnalyst()">Save Karo</button>
-</div>
+  <div class="card">
+    <h3>3. Analyst Text</h3>
+    <input id="analystInput" placeholder="Jai Shree Ram jaise text" style="padding:12px;">
+    <button onclick="saveAnalyst()">Save Karo</button>
+  </div>
 
-<a href="index.html" style="color:#aaa;display:block;text-align:center;margin-top:20px;">Index Dekho -></a>
+  <a href="index.html" style="color:#aaa;display:block;text-align:center;margin-top:20px;">Index Dekho -></a>
 
-<script>
-let tempLogo = localStorage.getItem('siteLogo') || '';
-document.getElementById('logoPreview').src = tempLogo;
-function fileToBase64(file){return new Promise(r=>{let fr=new FileReader(); fr.onload=()=>r(fr.result); fr.readAsDataURL(file)})}
-document.getElementById('logoFile').addEventListener('change', async (e)=>{
-  if(e.target.files[0]){tempLogo = await fileToBase64(e.target.files[0]); document.getElementById('logoPreview').src=tempLogo;}
-});
-function saveLogo(){localStorage.setItem('siteLogo', tempLogo); alert('Logo Save Ho Gaya!');}
+  <script>
+    let tempLogo = localStorage.getItem('siteLogo') || '';
 
-async function addGalleryPhotos(){
-  let files = document.getElementById('galleryFile').files;
-  if(!files.length) return alert('Pehle photo select kar');
-  let photos = JSON.parse(localStorage.getItem('galleryPhotos')||'[]');
-  for(let f of files){ let b64 = await fileToBase64(f); photos.push(b64); }
-  localStorage.setItem('galleryPhotos', JSON.stringify(photos));
-  document.getElementById('galleryFile').value=''; loadPreview(); alert(photos.length + ' Photos Save Ho Gayi');
-}
-function loadPreview(){
-  let photos=JSON.parse(localStorage.getItem('galleryPhotos')||'[]');
-  document.getElementById('preview').innerHTML=photos.map((l,i)=>`<div style="position:relative"><img src="${l}"><span onclick="removePhoto(${i})" style="position:absolute;top:-5px;right:-5px;background:red;border-radius:50%;width:22px;height:22px;text-align:center;cursor:pointer;line-height:22px;">x</span></div>`).join('');
-}
-function removePhoto(i){let p=JSON.parse(localStorage.getItem('galleryPhotos')||'[]'); p.splice(i,1); localStorage.setItem('galleryPhotos',JSON.stringify(p)); loadPreview();}
-function clearGallery(){if(confirm('Pakka delete karni hai?')){localStorage.removeItem('galleryPhotos'); loadPreview();}}
-function saveAnalyst(){localStorage.setItem('analystData', document.getElementById('analystInput').value); alert('Save Ho Gaya');}
-loadPreview();
-document.getElementById('analystInput').value=localStorage.getItem('analystData')||'Jai shree ram';
-</script></body></html>
+    function safeRead(key, fallback) {
+      try {
+        const value = localStorage.getItem(key);
+        return value === null ? fallback : value;
+      } catch (error) {
+        return fallback;
+      }
+    }
+
+    function safeWrite(key, value) {
+      try {
+        localStorage.setItem(key, value);
+        return true;
+      } catch (error) {
+        alert('Storage full ho gaya hai. Thodi si photos ya logo remove kar ke try karo.');
+        return false;
+      }
+    }
+
+    function dataUrlFromFile(file, maxWidth = 1200, quality = 0.8) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = function () {
+          const img = new Image();
+          img.onload = function () {
+            const canvas = document.createElement('canvas');
+            const scale = Math.min(1, maxWidth / Math.max(img.width, img.height));
+            canvas.width = Math.max(1, Math.round(img.width * scale));
+            canvas.height = Math.max(1, Math.round(img.height * scale));
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          };
+          img.onerror = reject;
+          img.src = reader.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function loadPreview() {
+      let photos = [];
+      try {
+        photos = JSON.parse(localStorage.getItem('galleryPhotos') || '[]');
+      } catch (error) {
+        photos = [];
+      }
+
+      const preview = document.getElementById('preview');
+      if (!photos.length) {
+        preview.innerHTML = '<p style="color:#666; margin: 10px 0 0;">Abhi koi photo nahi hai</p>';
+        return;
+      }
+
+      preview.innerHTML = photos.map((link, index) => `
+        <div class="thumb">
+          <img src="${link}" alt="Gallery photo ${index + 1}">
+          <button class="delete-btn" type="button" onclick="removePhoto(${index})">x</button>
+        </div>
+      `).join('');
+    }
+
+    async function addGalleryPhotos() {
+      const input = document.getElementById('galleryFile');
+      const files = Array.from(input.files || []);
+      if (!files.length) {
+        alert('Pehle photo select kar');
+        return;
+      }
+
+      let photos = [];
+      try {
+        photos = JSON.parse(localStorage.getItem('galleryPhotos') || '[]');
+      } catch (error) {
+        photos = [];
+      }
+
+      try {
+        for (const file of files) {
+          const compressed = await dataUrlFromFile(file, 1200, 0.72);
+          photos.push(compressed);
+        }
+        if (!safeWrite('galleryPhotos', JSON.stringify(photos))) return;
+        input.value = '';
+        loadPreview();
+        alert(photos.length + ' Photos Save Ho Gayi');
+      } catch (error) {
+        alert('Photo ko process karte waqt problem hui. Dusra photo try karo.');
+      }
+    }
+
+    function removePhoto(index) {
+      let photos = [];
+      try {
+        photos = JSON.parse(localStorage.getItem('galleryPhotos') || '[]');
+      } catch (error) {
+        photos = [];
+      }
+      photos.splice(index, 1);
+      if (!safeWrite('galleryPhotos', JSON.stringify(photos))) return;
+      loadPreview();
+    }
+
+    function clearGallery() {
+      if (!confirm('Pakka delete karni hai?')) return;
+      if (!safeWrite('galleryPhotos', JSON.stringify([]))) return;
+      loadPreview();
+    }
+
+    function saveLogo() {
+      if (!tempLogo) {
+        const existing = safeRead('siteLogo', '');
+        if (existing) {
+          tempLogo = existing;
+        } else {
+          alert('Pehle logo select karo');
+          return;
+        }
+      }
+      safeWrite('siteLogo', tempLogo);
+      alert('Logo Save Ho Gaya!');
+    }
+
+    function saveAnalyst() {
+      const value = document.getElementById('analystInput').value.trim();
+      safeWrite('analystData', value);
+      alert('Save Ho Gaya');
+    }
+
+    document.getElementById('logoFile').addEventListener('change', async (event) => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      try {
+        tempLogo = await dataUrlFromFile(file, 1200, 0.8);
+        document.getElementById('logoPreview').src = tempLogo;
+      } catch (error) {
+        alert('Logo upload fail hua.');
+      }
+    });
+
+    const savedLogo = safeRead('siteLogo', '');
+    if (savedLogo) {
+      tempLogo = savedLogo;
+      document.getElementById('logoPreview').src = tempLogo;
+    }
+
+    const savedAnalyst = safeRead('analystData', '');
+    document.getElementById('analystInput').value = savedAnalyst || '';
+    loadPreview();
+  </script>
+</body>
+</html>
