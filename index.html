@@ -4,58 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Master Project</title>
-    <!-- Chart.js लाइब्रेरी ग्राफ के लिए जरूरी है -->
-    <script src="https://jsdelivr.net"></script>
+    <!-- FIX 1: Ye sahi Chart.js link hai -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        .header-nav { padding: 15px; background: #f8f9fa; display: flex; align-items: center; border-bottom: 1px solid #ddd; }
+        body{margin:0; font-family: Arial, sans-serif; background:#080808; color:white;}
+        .header-nav { padding: 15px; background: #0f0f0f; display: flex; align-items: center; border-bottom: 1px solid #222; }
         .site-logo { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; background: #eee; }
-        .main-content { padding: 20px; font-family: Arial, sans-serif; }
+        .main-content { padding: 20px; max-width: 1200px; margin:auto;}
+        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-top:20px; }
+        .gallery img { width:100%; height:200px; object-fit:cover; border-radius:12px; border:1px solid #222; }
+        .card{background:#141414; padding:20px; border-radius:12px; border:1px solid #222; margin-top:20px;}
     </style>
 </head>
 <body>
 
-    <!-- वेबसाइट का हेडर जहाँ लोगो दिखेगा -->
     <div class="header-nav">
-        <img id="mainSiteLogo" class="site-logo" src="https://wikimedia.org" alt="Logo" />
+        <!-- FIX 2: Sahi logo link -->
+        <img id="mainSiteLogo" class="site-logo" src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg" alt="Logo" />
         <h1 style="margin-left: 15px; font-size: 20px;">My Project Dashboard</h1>
     </div>
 
     <div class="main-content">
-        <!-- आपका पुराना डेटा टेक्स्ट व्यू -->
-        <div id="analystView">Loading Analyst Data...</div>
-        
-        <!-- आपका पुराना चार्ट/ग्राफ बॉक्स -->
-        <canvas id="myChart" width="400" height="200"></canvas>
+        <div class="card">
+            <h3>Analyst View</h3>
+            <div id="analystView">Loading...</div>
+        </div>
+
+        <div class="card">
+            <h3>Project Progress</h3>
+            <canvas id="myChart" width="400" height="200"></canvas>
+        </div>
+
+        <div class="card">
+            <h3>Gallery Photos</h3>
+            <p style="color:#888;">Ye photos admin se ayengi</p>
+            <div id="galleryBox" class="gallery"></div>
+        </div>
     </div>
 
     <script>
-        // --- 1. लोगो ऑटो-अपडेट करने का नया कोड ---
         window.addEventListener('DOMContentLoaded', function() {
-            const mainSiteLogo = document.getElementById('mainSiteLogo');
-            const currentLogo = localStorage.getItem('siteLogo');
-            if (currentLogo && mainSiteLogo) {
-                mainSiteLogo.src = currentLogo;
-            }
-        });
+            // Logo
+            const savedLogo = localStorage.getItem('siteLogo');
+            if (savedLogo) document.getElementById('mainSiteLogo').src = savedLogo;
 
-        // --- 2. आपका पुराना डेटा और Chart.js का कोड (सुरक्षित है) ---
-        // (नोट: यह डेटा आपके बैकएंड/data.json से कनेक्टेड होना चाहिए)
-        const data = { analyst: "Analyst Report Loading..." }; 
-        
-        document.getElementById('analystView').innerText = data.analyst;
-        
-        new Chart(document.getElementById('myChart'), {
-            type: 'bar',
-            data: {
-                labels: ['January', 'February', 'March', 'April'],
-                datasets: [{
-                    label: 'Project Progress',
-                    data:,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
+            // Analyst
+            const savedAnalyst = localStorage.getItem('analystData');
+            document.getElementById('analystView').innerText = savedAnalyst || "Analyst Report - Admin se add karo";
+
+            // Gallery - Yahi tera Gallery ka photo wala code hai
+            const savedGallery = JSON.parse(localStorage.getItem('galleryPhotos') || '[]');
+            const galleryBox = document.getElementById('galleryBox');
+            if(savedGallery.length === 0){
+                galleryBox.innerHTML = '<p style="color:#666;">Abhi koi photo nahi, admin.html se add karo</p>';
+            } else {
+                galleryBox.innerHTML = savedGallery.map(link => `<img src="${link}" alt="Gallery">`).join('');
             }
+
+            // Chart - FIX 3: Data fix kiya
+            const savedChart = JSON.parse(localStorage.getItem('chartData') || '[12, 19, 8, 15]');
+            new Chart(document.getElementById('myChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['January', 'February', 'March', 'April'],
+                    datasets: [{
+                        label: 'Project Progress',
+                        data: savedChart,
+                        backgroundColor: '#ff2a2a',
+                        borderWidth: 0
+                    }]
+                },
+                options: { scales: { x: { ticks: {color:'white'} }, y: { ticks: {color:'white'} } } }
+            });
         });
     </script>
 </body>
