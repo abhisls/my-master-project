@@ -1,36 +1,11 @@
-<div class="container">
-    <h2>1. Logo Badlo</h2>
-    <!-- गैलरी से फोटो चुनने के लिए इनपुट -->
-    <input type="file" id="logoInput" accept="image/*" />
-    
-    <!-- प्रीव्यू देखने के लिए गोल घेरा -->
-    <div class="preview-circle" style="margin-top: 15px;">
-        <img id="logoPreview" src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg" alt="Preview" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;" />
-    </div>
-</div>
-
 <script>
-const logoInput = document.getElementById('logoInput');
-const logoPreview = document.getElementById('logoPreview');
-
-// पहले से सेव इमेज लोड करें
-const savedLogo = localStorage.getItem('siteLogo');
-if (savedLogo) {
-    logoPreview.src = savedLogo;
-}
-
-// नई इमेज गैलरी से चुनने पर
-logoInput.addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const base64Image = e.target.result;
-            logoPreview.src = base64Image; // प्रीव्यू बदलें
-            localStorage.setItem('siteLogo', base64Image); // सेव करें
-            alert("लोगो बदल गया है! इंडेक्स पेज देखें।");
-        };
-        reader.readAsDataURL(file);
+window.addEventListener('DOMContentLoaded', function() {
+    const mainSiteLogo = document.getElementById('mainSiteLogo');
+    const currentLogo = localStorage.getItem('siteLogo');
+    
+    // अगर एडमिन ने लोगो बदला है, तो उसे यहाँ दिखाएं
+    if (currentLogo && mainSiteLogo) {
+        mainSiteLogo.src = currentLogo;
     }
 });
 </script>
