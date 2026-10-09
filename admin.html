@@ -1,62 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel</title>
-    <style>
-        .container { padding: 20px; font-family: Arial, sans-serif; }
-        .preview-circle { 
-            width: 150px; height: 150px; 
-            border-radius: 50%; border: 2px dashed #ccc; 
-            margin-top: 15px; overflow: hidden; 
-            display: flex; align-items: center; justify-content: center;
-        }
-        .preview-circle img { width: 100%; height: 100%; object-fit: cover; }
-        input[type="file"] { margin-top: 10px; display: block; }
-    </style>
-</head>
-<body>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin - Gallery</title>
+<style>body{background:#0a0a0a;color:white;font-family:sans-serif;padding:20px;max-width:600px;margin:auto}input,textarea{width:100%;padding:12px;margin:8px 0 16px;background:#1a1a1a;border:1px solid #333;color:white;border-radius:8px}button{padding:12px;background:white;color:black;border:none;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;margin-top:10px}.card{background:#141414;padding:20px;border-radius:12px;border:1px solid #222;margin-bottom:20px}img{width:100px;height:100px;object-fit:cover;border-radius:8px;margin:5px}</style>
+</head><body>
+<h2>Admin Panel - Gallery Control</h2>
 
-    <div class="container">
-        <p style="color: gray; font-size: 14px;">* Yaha se badlega, Index pe auto update hoga</p>
-        <h2>1. Logo Badlo</h2>
-        
-        <!-- गैलरी से फाइल चुनने के लिए इनपुट बटन -->
-        <input type="file" id="logoInput" accept="image/*" />
-        
-        <!-- लोगो का प्रीव्यू देखने के लिए गोल घेरा -->
-        <div class="preview-circle">
-            <img id="logoPreview" src="https://wikimedia.org" alt="Preview" />
-        </div>
-    </div>
+<div class="card"><h3>Logo Link</h3><input id="logoInput" placeholder="https://...logo.png"><button onclick="saveLogo()">Logo Save Karo</button></div>
 
-    <script>
-        const logoInput = document.getElementById('logoInput');
-        const logoPreview = document.getElementById('logoPreview');
+<div class="card"><h3>Gallery Photo Add Karo</h3><p style="color:#888;font-size:12px;">1 photo ka Copy Link paste karo aur Add dabao</p><input id="galleryInput" placeholder="https://...photo.jpg"><button onclick="addPhoto()">+ Photo Add Karo</button><div id="preview" style="display:flex;flex-wrap:wrap;margin-top:15px;"></div><button onclick="clearGallery()" style="background:#ff2a2a;color:white;">Saari Photos Delete</button></div>
 
-        // 1. अगर पहले से कोई इमेज सेव है, तो उसे एडमिन पैनल में लोड करें
-        const savedLogo = localStorage.getItem('siteLogo');
-        if (savedLogo) {
-            logoPreview.src = savedLogo;
-        }
+<div class="card"><h3>Analyst Text</h3><textarea id="analystInput" rows="3"></textarea><button onclick="saveAnalyst()">Analyst Save</button></div>
 
-        // 2. गैलरी से नई इमेज चुनने पर उसे सेव करने का फंक्शन
-        logoInput.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                
-                reader.onload = function(e) {
-                    const base64Image = e.target.result;
-                    logoPreview.src = base64Image; // तुरंत स्क्रीन पर दिखाएं
-                    localStorage.setItem('siteLogo', base64Image); // ब्राउज़र मेमोरी में सेव करें
-                    alert("लोगो सफलतापूर्वक बदल गया है! इंडेक्स पेज चेक करें।");
-                };
-                
-                reader.readAsDataURL(file);
-            }
-        });
-    </script>
-</body>
-</html>
+<a href="index.html" style="color:#aaa;display:block;text-align:center;margin-top:20px;">Index Dekho -></a>
+
+<script>
+function loadPreview(){const photos=JSON.parse(localStorage.getItem('galleryPhotos')||'[]');document.getElementById('preview').innerHTML=photos.map((l,i)=>`<div style="position:relative"><img src="${l}"><span onclick="removePhoto(${i})" style="position:absolute;top:0;right:0;background:red;border-radius:50%;width:20px;height:20px;text-align:center;cursor:pointer;">x</span></div>`).join('')}
+function saveLogo(){localStorage.setItem('siteLogo', document.getElementById('logoInput').value); alert('Logo save ho gaya');}
+function addPhoto(){let link=document.getElementById('galleryInput').value;if(!link)return alert('Link dalo');let photos=JSON.parse(localStorage.getItem('galleryPhotos')||'[]');photos.push(link);localStorage.setItem('galleryPhotos',JSON.stringify(photos));document.getElementById('galleryInput').value='';loadPreview();}
+function removePhoto(i){let p=JSON.parse(localStorage.getItem('galleryPhotos')||'[]');p.splice(i,1);localStorage.setItem('galleryPhotos',JSON.stringify(p));loadPreview();}
+function clearGallery(){localStorage.removeItem('galleryPhotos');loadPreview();}
+function saveAnalyst(){localStorage.setItem('analystData',document.getElementById('analystInput').value); alert('Analyst save');}
+loadPreview();
+document.getElementById('logoInput').value=localStorage.getItem('siteLogo')||'';document.getElementById('analystInput').value=localStorage.getItem('analystData')||'';
+</script></body></html>
