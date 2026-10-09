@@ -1,23 +1,56 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin - Gallery</title>
-<style>body{background:#0a0a0a;color:white;font-family:sans-serif;padding:20px;max-width:600px;margin:auto}input,textarea{width:100%;padding:12px;margin:8px 0 16px;background:#1a1a1a;border:1px solid #333;color:white;border-radius:8px}button{padding:12px;background:white;color:black;border:none;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;margin-top:10px}.card{background:#141414;padding:20px;border-radius:12px;border:1px solid #222;margin-bottom:20px}img{width:100px;height:100px;object-fit:cover;border-radius:8px;margin:5px}</style>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin - Final</title>
+<style>body{background:#0a0a0a;color:white;font-family:sans-serif;padding:20px;max-width:600px;margin:auto}input{width:100%;padding:12px;margin:8px 0;background:#1a1a1a;border:1px solid #333;color:white;border-radius:8px}button{padding:12px;background:white;color:black;border:none;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;margin-top:10px}.card{background:#141414;padding:20px;border-radius:12px;border:1px solid #222;margin-bottom:20px}img{width:100px;height:100px;object-fit:cover;border-radius:8px;margin:5px;border:1px solid #333}</style>
 </head><body>
-<h2>Admin Panel - Gallery Control</h2>
+<h2>Admin - Final Upload System</h2>
 
-<div class="card"><h3>Logo Link</h3><input id="logoInput" placeholder="https://...logo.png"><button onclick="saveLogo()">Logo Save Karo</button></div>
+<div class="card">
+  <h3>1. Logo Upload Karo (Phone se)</h3>
+  <input type="file" id="logoFile" accept="image/*">
+  <img id="logoPreview" src="" style="display:block;margin-top:10px;">
+  <button onclick="saveLogo()">Logo Save Karo</button>
+</div>
 
-<div class="card"><h3>Gallery Photo Add Karo</h3><p style="color:#888;font-size:12px;">1 photo ka Copy Link paste karo aur Add dabao</p><input id="galleryInput" placeholder="https://...photo.jpg"><button onclick="addPhoto()">+ Photo Add Karo</button><div id="preview" style="display:flex;flex-wrap:wrap;margin-top:15px;"></div><button onclick="clearGallery()" style="background:#ff2a2a;color:white;">Saari Photos Delete</button></div>
+<div class="card">
+  <h3>2. Gallery Photos Upload Karo</h3>
+  <input type="file" id="galleryFile" accept="image/*" multiple>
+  <p style="color:#888;font-size:12px;">Ek saath 5-6 photo select kar sakta hai</p>
+  <button onclick="addGalleryPhotos()">+ Gallery Me Add Karo</button>
+  <div id="preview" style="display:flex;flex-wrap:wrap;margin-top:15px;"></div>
+  <button onclick="clearGallery()" style="background:#ff2a2a;color:white;">Saari Delete</button>
+</div>
 
-<div class="card"><h3>Analyst Text</h3><textarea id="analystInput" rows="3"></textarea><button onclick="saveAnalyst()">Analyst Save</button></div>
+<div class="card">
+  <h3>3. Analyst Text</h3>
+  <input id="analystInput" placeholder="Jai Shree Ram jaise text" style="padding:12px;">
+  <button onclick="saveAnalyst()">Save Karo</button>
+</div>
 
 <a href="index.html" style="color:#aaa;display:block;text-align:center;margin-top:20px;">Index Dekho -></a>
 
 <script>
-function loadPreview(){const photos=JSON.parse(localStorage.getItem('galleryPhotos')||'[]');document.getElementById('preview').innerHTML=photos.map((l,i)=>`<div style="position:relative"><img src="${l}"><span onclick="removePhoto(${i})" style="position:absolute;top:0;right:0;background:red;border-radius:50%;width:20px;height:20px;text-align:center;cursor:pointer;">x</span></div>`).join('')}
-function saveLogo(){localStorage.setItem('siteLogo', document.getElementById('logoInput').value); alert('Logo save ho gaya');}
-function addPhoto(){let link=document.getElementById('galleryInput').value;if(!link)return alert('Link dalo');let photos=JSON.parse(localStorage.getItem('galleryPhotos')||'[]');photos.push(link);localStorage.setItem('galleryPhotos',JSON.stringify(photos));document.getElementById('galleryInput').value='';loadPreview();}
-function removePhoto(i){let p=JSON.parse(localStorage.getItem('galleryPhotos')||'[]');p.splice(i,1);localStorage.setItem('galleryPhotos',JSON.stringify(p));loadPreview();}
-function clearGallery(){localStorage.removeItem('galleryPhotos');loadPreview();}
-function saveAnalyst(){localStorage.setItem('analystData',document.getElementById('analystInput').value); alert('Analyst save');}
+let tempLogo = localStorage.getItem('siteLogo') || '';
+document.getElementById('logoPreview').src = tempLogo;
+function fileToBase64(file){return new Promise(r=>{let fr=new FileReader(); fr.onload=()=>r(fr.result); fr.readAsDataURL(file)})}
+document.getElementById('logoFile').addEventListener('change', async (e)=>{
+  if(e.target.files[0]){tempLogo = await fileToBase64(e.target.files[0]); document.getElementById('logoPreview').src=tempLogo;}
+});
+function saveLogo(){localStorage.setItem('siteLogo', tempLogo); alert('Logo Save Ho Gaya!');}
+
+async function addGalleryPhotos(){
+  let files = document.getElementById('galleryFile').files;
+  if(!files.length) return alert('Pehle photo select kar');
+  let photos = JSON.parse(localStorage.getItem('galleryPhotos')||'[]');
+  for(let f of files){ let b64 = await fileToBase64(f); photos.push(b64); }
+  localStorage.setItem('galleryPhotos', JSON.stringify(photos));
+  document.getElementById('galleryFile').value=''; loadPreview(); alert(photos.length + ' Photos Save Ho Gayi');
+}
+function loadPreview(){
+  let photos=JSON.parse(localStorage.getItem('galleryPhotos')||'[]');
+  document.getElementById('preview').innerHTML=photos.map((l,i)=>`<div style="position:relative"><img src="${l}"><span onclick="removePhoto(${i})" style="position:absolute;top:-5px;right:-5px;background:red;border-radius:50%;width:22px;height:22px;text-align:center;cursor:pointer;line-height:22px;">x</span></div>`).join('');
+}
+function removePhoto(i){let p=JSON.parse(localStorage.getItem('galleryPhotos')||'[]'); p.splice(i,1); localStorage.setItem('galleryPhotos',JSON.stringify(p)); loadPreview();}
+function clearGallery(){if(confirm('Pakka delete karni hai?')){localStorage.removeItem('galleryPhotos'); loadPreview();}}
+function saveAnalyst(){localStorage.setItem('analystData', document.getElementById('analystInput').value); alert('Save Ho Gaya');}
 loadPreview();
-document.getElementById('logoInput').value=localStorage.getItem('siteLogo')||'';document.getElementById('analystInput').value=localStorage.getItem('analystData')||'';
+document.getElementById('analystInput').value=localStorage.getItem('analystData')||'Jai shree ram';
 </script></body></html>
