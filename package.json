@@ -1,0 +1,11 @@
+{
+      "name": "camerawalesir-portfolio",
+        "version": "1.0.0",
+          "description": "Premium Photography portfolio displaying all core developer extensions.",
+            "main": "index.html",
+              "scripts": {
+                  "start": "python app.py"
+                    }
+                    }
+                    
+}

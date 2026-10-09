@@ -1,0 +1,24 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CameraWale Sir</title><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>body{margin:0;background:#080808;color:white;font-family:sans-serif}header{padding:15px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #222;background:#0f0f0f}header img{width:45px;height:45px;border-radius:50%;background:white;object-fit:contain}.tabs{display:flex;gap:8px;padding:15px;flex-wrap:wrap;max-width:1200px;margin:0 auto}.tab-btn{padding:10px 18px;border-radius:20px;border:1px solid #333;background:#111;color:#aaa;cursor:pointer}.tab-btn.active{background:white;color:black}.content{display:none;max-width:1200px;margin:0 auto;padding:20px}.content.active{display:block}.card{background:#141414;border:1px solid #222;border-radius:16px;padding:20px;margin-top:15px}img.demo{width:100%;max-width:800px;border-radius:12px;display:block;margin:15px 0}</style>
+    </head><body>
+    <header><img id="siteLogo" src="" alt="Logo"><h2 style="margin:0;">CameraWale Sir</h2></header>
+    <div class="tabs">
+    <button class="tab-btn active" onclick="openTab(event,'logo')">LOGO</button>
+    <button class="tab-btn" onclick="openTab(event,'image')">IMAGE</button>
+    <button class="tab-btn" onclick="openTab(event,'chart')">CHART</button>
+    <button class="tab-btn" onclick="openTab(event,'analyst')">ANALYST</button>
+    </div>
+    <div id="logo" class="content active"><div class="card"><h2>Logo</h2><img id="logoView" class="demo" style="max-width:200px;background:white;padding:20px;"></div></div>
+    <div id="image" class="content"><div class="card" id="imageBox"></div></div>
+    <div id="chart" class="content"><div class="card"><canvas id="myChart"></canvas></div></div>
+    <div id="analyst" class="content"><div class="card"><p id="analystView"></p></div></div>
+    <script>
+    function openTab(e,id){document.querySelectorAll('.content').forEach(c=>c.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');e.currentTarget.classList.add('active')}
+    let data = JSON.parse(localStorage.getItem('cameraWaleData') || 'null');
+    if(!data){data={logo:"https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg",images:["https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800"],chart:[12,19,3,5],analyst:"Report yaha ayegi"}}
+    document.getElementById('siteLogo').src=data.logo;document.getElementById('logoView').src=data.logo;
+    document.getElementById('imageBox').innerHTML = data.images.map(link=>`<img class="demo" src="${link}">`).join('') || "Koi image nahi";
+    document.getElementById('analystView').innerText=data.analyst;
+    new Chart(document.getElementById('myChart'),{type:'bar',data:{labels:['Nature','Wedding','Portrait','Street'],datasets:[{label:'Shoots',data:data.chart,backgroundColor:'#ff2a2a'}]},options:{scales:{x:{ticks:{color:'white'}},y:{ticks:{color:'white'}}}}});
+    </script></body></html>
