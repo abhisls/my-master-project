@@ -1,36 +1,62 @@
-<div class="container">
-    <h2>1. Logo Badlo</h2>
-    <!-- गैलरी से फोटो चुनने के लिए इनपुट -->
-    <input type="file" id="logoInput" accept="image/*" />
-    
-    <!-- प्रीव्यू देखने के लिए गोल घेरा -->
-    <div class="preview-circle" style="margin-top: 15px;">
-        <img id="logoPreview" src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg" alt="Preview" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <style>
+        .container { padding: 20px; font-family: Arial, sans-serif; }
+        .preview-circle { 
+            width: 150px; height: 150px; 
+            border-radius: 50%; border: 2px dashed #ccc; 
+            margin-top: 15px; overflow: hidden; 
+            display: flex; align-items: center; justify-content: center;
+        }
+        .preview-circle img { width: 100%; height: 100%; object-fit: cover; }
+        input[type="file"] { margin-top: 10px; display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <p style="color: gray; font-size: 14px;">* Yaha se badlega, Index pe auto update hoga</p>
+        <h2>1. Logo Badlo</h2>
+        
+        <!-- गैलरी से फाइल चुनने के लिए इनपुट बटन -->
+        <input type="file" id="logoInput" accept="image/*" />
+        
+        <!-- लोगो का प्रीव्यू देखने के लिए गोल घेरा -->
+        <div class="preview-circle">
+            <img id="logoPreview" src="https://wikimedia.org" alt="Preview" />
+        </div>
     </div>
-</div>
 
-<script>
-const logoInput = document.getElementById('logoInput');
-const logoPreview = document.getElementById('logoPreview');
+    <script>
+        const logoInput = document.getElementById('logoInput');
+        const logoPreview = document.getElementById('logoPreview');
 
-// पहले से सेव इमेज लोड करें
-const savedLogo = localStorage.getItem('siteLogo');
-if (savedLogo) {
-    logoPreview.src = savedLogo;
-}
+        // 1. अगर पहले से कोई इमेज सेव है, तो उसे एडमिन पैनल में लोड करें
+        const savedLogo = localStorage.getItem('siteLogo');
+        if (savedLogo) {
+            logoPreview.src = savedLogo;
+        }
 
-// नई इमेज गैलरी से चुनने पर
-logoInput.addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const base64Image = e.target.result;
-            logoPreview.src = base64Image; // प्रीव्यू बदलें
-            localStorage.setItem('siteLogo', base64Image); // सेव करें
-            alert("लोगो बदल गया है! इंडेक्स पेज देखें।");
-        };
-        reader.readAsDataURL(file);
-    }
-});
-</script>
+        // 2. गैलरी से नई इमेज चुनने पर उसे सेव करने का फंक्शन
+        logoInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const base64Image = e.target.result;
+                    logoPreview.src = base64Image; // तुरंत स्क्रीन पर दिखाएं
+                    localStorage.setItem('siteLogo', base64Image); // ब्राउज़र मेमोरी में सेव करें
+                    alert("लोगो सफलतापूर्वक बदल गया है! इंडेक्स पेज चेक करें।");
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
